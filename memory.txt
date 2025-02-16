@@ -1,0 +1,128 @@
+PROJECT: MVVM E-commerce Clothing Store App
+
+ARCHITECTURE:
+- MVVM (Model-View-ViewModel) pattern
+- Flutter/Dart
+- GitHub repository: https://github.com/CntrlQed/peach.stor.git
+
+FOLDER STRUCTURE:
+/lib
+  /core
+    /model
+    /view
+      /screens
+        - choose_view.dart
+        - login_view.dart
+        - signup_view.dart
+        - splash_view.dart
+        - starting_view.dart
+      /widgets
+    /viewmodel
+      - choose_viewmodel.dart
+      - login_viewmodel.dart
+      - signup_viewmodel.dart
+      - splash_viewmodel.dart
+      - starting_viewmodel.dart
+    - main.dart
+
+CORE REQUIREMENTS:
+1. Follow MVVM structure strictly
+2. Handle assets/images (to be provided by user)
+3. GitHub integration (link to be provided)
+
+FILE HANDLING RULES:
+- Check if file exists before modification
+- Read existing files before making changes
+- Make changes with logical precision
+- All commands must be Windows-compatible
+
+PENDING INFORMATION NEEDED:
+1. GitHub repository link
+2. Asset/image files
+3. Specific features required for the store
+4. Database requirements
+5. Authentication requirements
+6. Payment gateway integration details
+7. Target Windows platform specifics (.NET version, etc.)
+8. Preferred UI framework/library 
+
+UI SCREENS SEQUENCE:
+1. Splash Screen
+   - Black background
+   - peach.png logo centered
+
+2. Starting Page
+   - Black background with pattern
+   - starting.png
+   - "GET STARTED" button
+   - Terms and conditions text
+
+3. User Type Selection
+   - Two options: USER / CONSUMER
+   - Clean black/white design
+   - Welcome text
+
+4. Login Page
+   - peach.png logo
+   - Email/Password fields
+   - Google sign-in option (google.png)
+   - "Sign In" button
+
+5. Sign Up Page
+   - First Name
+   - Last Name
+   - Phone Number
+   - Email Address
+   - Password
+   - Google sign-up option
+   - "CREATE ACCOUNT" button
+
+6. Home Page (User Side)
+   - Top bar:
+     - peach.png (left)
+     - Notification.png (right)
+     - Shopping Bag.png (right)
+   - Main ad section: home_ad.png
+   - Product grid: costume.png
+   - Bottom Navigation:
+     - home.png
+     - diversity.png
+     - heart.png
+     - SuccessfulDelivery.png
+     - Person.png
+
+ASSETS LOCATION:
+/assets/
+- peach.png
+- starting.png
+- google.png
+- home_ad.png
+- costume.png
+- home.png
+- diversity.png
+- heart.png
+- SuccessfulDelivery.png
+- Person.png
+- Notification.png
+- Shopping Bag.png
+
+IMPLEMENTATION PLAN:
+1. Create base MVVM structure for each screen:
+   - Splash Screen
+   - Starting Screen
+   - Choose Screen (User/Consumer)
+   - Login Screen
+   - Signup Screen
+   - Home Screen
+
+2. Each screen will have:
+   - View (.dart file in screens folder)
+   - ViewModel (.dart file in viewmodel folder)
+   - Required widgets (in widgets folder)
+
+3. Implementation sequence:
+   a. Base classes and utilities
+   b. Screen implementations
+   c. Navigation system
+   d. Asset integration
+   e. UI polish and transitions 
