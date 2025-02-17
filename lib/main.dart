@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:peach_store/view/screens/splash_view.dart';
+import 'core/view/screens/splash_view.dart';
 
 void main() {
   runApp(const MyApp());

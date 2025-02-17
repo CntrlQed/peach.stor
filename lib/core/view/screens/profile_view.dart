@@ -109,7 +109,7 @@ class ProfileView extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: OutlinedButton(
-                  onPressed: () => model.logout(),
+                  onPressed: () => model.logout(context),
                   style: OutlinedButton.styleFrom(
                     side: const BorderSide(color: Colors.red),
                     minimumSize: const Size(double.infinity, 50),

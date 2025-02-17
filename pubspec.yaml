@@ -16,4 +16,16 @@ dev_dependencies:
 
 flutter:
   assets:
-    - assets/ 
+    - assets/
+    - assets/peach.png
+    - assets/starting.png
+    - assets/google.png
+    - assets/home_ad.png
+    - assets/costume.png
+    - assets/home.png
+    - assets/diversity.png
+    - assets/heart.png
+    - assets/SuccessfulDelivery.png
+    - assets/Person.png
+    - assets/Notification.png
+    - assets/Shopping Bag.png 
