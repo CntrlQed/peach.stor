@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../../constants/app_constants.dart';
 import '../../viewmodel/profile_viewmodel.dart';
+import '../../view/widgets/base_page.dart';
 
 class ProfileView extends StatelessWidget {
   const ProfileView({Key? key}) : super(key: key);
@@ -10,22 +12,25 @@ class ProfileView extends StatelessWidget {
     return ChangeNotifierProvider<ProfileViewModel>(
       create: (context) => ProfileViewModel(),
       child: Consumer<ProfileViewModel>(
-        builder: (context, model, child) => Scaffold(
+        builder: (context, model, child) => BasePage(
+          showBottomNav: true,
+          currentIndex: 4,
+          onNavTap: (index) => model.onNavItemTapped(index, context),
           backgroundColor: Colors.black,
-          appBar: AppBar(
+          customAppBar: AppBar(
             backgroundColor: Colors.black,
             elevation: 0,
             leading: Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Image.asset('assets/peach.png'),
+              child: Image.asset(AppAssets.peachIcon),
             ),
             actions: [
               IconButton(
-                icon: Image.asset('assets/Notification.png'),
+                icon: Image.asset(AppAssets.notificationIcon),
                 onPressed: () {},
               ),
               IconButton(
-                icon: Image.asset('assets/Shopping Bag.png'),
+                icon: Image.asset(AppAssets.shoppingBagIcon),
                 onPressed: () {},
               ),
             ],
@@ -128,42 +133,13 @@ class ProfileView extends StatelessWidget {
               ),
             ],
           ),
-          bottomNavigationBar: BottomNavigationBar(
-            type: BottomNavigationBarType.fixed,
-            backgroundColor: Colors.black,
-            selectedItemColor: Colors.white,
-            unselectedItemColor: Colors.grey,
-            currentIndex: 4,
-            onTap: model.onNavItemTapped,
-            items: [
-              BottomNavigationBarItem(
-                icon: Image.asset('assets/Home.png', height: 24),
-                label: 'Home',
-              ),
-              BottomNavigationBarItem(
-                icon: Image.asset('assets/Diversity.png', height: 24),
-                label: 'Categories',
-              ),
-              BottomNavigationBarItem(
-                icon: Image.asset('assets/Heart.png', height: 24),
-                label: 'Favorites',
-              ),
-              BottomNavigationBarItem(
-                icon: Image.asset('assets/SuccessfulDelivery.png', height: 24),
-                label: 'Orders',
-              ),
-              BottomNavigationBarItem(
-                icon: Image.asset('assets/Person.png', height: 24),
-                label: 'Profile',
-              ),
-            ],
-          ),
         ),
       ),
     );
   }
 
-  Widget _buildMenuItem(String title, String subtitle, IconData icon, {required VoidCallback onTap}) {
+  Widget _buildMenuItem(String title, String subtitle, IconData icon,
+      {required VoidCallback onTap}) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       child: InkWell(
@@ -199,7 +175,8 @@ class ProfileView extends StatelessWidget {
                 ],
               ),
               const Spacer(),
-              const Icon(Icons.arrow_forward_ios, color: Colors.white, size: 16),
+              const Icon(Icons.arrow_forward_ios,
+                  color: Colors.white, size: 16),
             ],
           ),
         ),
@@ -219,4 +196,4 @@ class ProfileView extends StatelessWidget {
       ),
     );
   }
-} 
+}

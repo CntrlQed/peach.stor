@@ -18,6 +18,7 @@ flutter:
   assets:
     - assets/
     - assets/peach.png
+    - assets/home_Ad.png
     - assets/starting.png
     - assets/google.png
     - assets/home_ad.png
@@ -28,4 +29,5 @@ flutter:
     - assets/SuccessfulDelivery.png
     - assets/Person.png
     - assets/Notification.png
-    - assets/Shopping Bag.png 
+    - assets/Shopping Bag.png
+    - assets/active_status.png 

@@ -1,13 +1,26 @@
 import 'base_viewmodel.dart';
-// ignore: unused_import
 import 'package:flutter/material.dart';
 
 class FavoritesViewModel extends BaseViewModel {
-  void onNavItemTapped(int index) {
-    if (index != 2) { // If not favorites tab
+  void onNavItemTapped(int index, BuildContext context) {
+    if (index != 2) {
+      // If not favorites tab
       setState(ViewState.busy);
-      // TODO: Implement navigation to other screens
+      switch (index) {
+        case 0:
+          Navigator.pushReplacementNamed(context, '/home');
+          break;
+        case 1:
+          Navigator.pushReplacementNamed(context, '/categories');
+          break;
+        case 3:
+          Navigator.pushReplacementNamed(context, '/orders');
+          break;
+        case 4:
+          Navigator.pushReplacementNamed(context, '/profile');
+          break;
+      }
       setState(ViewState.idle);
     }
   }
-} 
+}

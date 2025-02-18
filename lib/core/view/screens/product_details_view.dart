@@ -1,40 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../../constants/app_constants.dart';
+import '../../models/product.dart';
 import '../../viewmodel/product_details_viewmodel.dart';
+import '../widgets/base_page.dart';
 
 class ProductDetailsView extends StatelessWidget {
-  const ProductDetailsView({Key? key}) : super(key: key);
+  final Product product;
+
+  const ProductDetailsView({
+    Key? key,
+    required this.product,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<ProductDetailsViewModel>(
-      create: (context) => ProductDetailsViewModel(),
+      create: (context) => ProductDetailsViewModel(product),
       child: Consumer<ProductDetailsViewModel>(
-        builder: (context, model, child) => Scaffold(
-          backgroundColor: Colors.black,
-          appBar: AppBar(
-            backgroundColor: Colors.black,
-            elevation: 0,
-            leading: TextButton.icon(
-              onPressed: () => Navigator.pop(context),
-              icon: const Icon(Icons.arrow_back_ios, color: Colors.white, size: 18),
-              label: const Text(
-                'BACK',
-                style: TextStyle(color: Colors.white, fontSize: 14),
-              ),
-            ),
-            leadingWidth: 100,
-            actions: [
-              IconButton(
-                icon: Image.asset('assets/Notification.png'),
-                onPressed: () {},
-              ),
-              IconButton(
-                icon: Image.asset('assets/Shopping Bag.png'),
-                onPressed: () {},
-              ),
-            ],
-          ),
+        builder: (context, model, child) => BasePage(
+          backgroundColor: AppColors.primary,
+          showBackButton: true,
+          showBottomNav: false,
           body: Column(
             children: [
               // Product Image Section
@@ -42,9 +29,12 @@ class ProductDetailsView extends StatelessWidget {
                 child: Stack(
                   fit: StackFit.expand,
                   children: [
-                    Image.asset(
-                      'assets/costume.png',
-                      fit: BoxFit.cover,
+                    Hero(
+                      tag: 'product_${product.id}',
+                      child: Image.asset(
+                        product.imageUrl,
+                        fit: BoxFit.cover,
+                      ),
                     ),
                     // Favorite Button
                     Positioned(
@@ -53,34 +43,56 @@ class ProductDetailsView extends StatelessWidget {
                       child: Container(
                         padding: const EdgeInsets.all(8),
                         decoration: BoxDecoration(
-                          color: Colors.red,
+                          color: model.isFavorite ? Colors.red : Colors.white,
                           borderRadius: BorderRadius.circular(8),
                         ),
-                        child: const Icon(
-                          Icons.favorite,
-                          color: Colors.white,
-                          size: 20,
+                        child: IconButton(
+                          icon: Icon(
+                            model.isFavorite
+                                ? Icons.favorite
+                                : Icons.favorite_border,
+                            color: model.isFavorite ? Colors.white : Colors.red,
+                          ),
+                          onPressed: model.toggleFavorite,
                         ),
                       ),
                     ),
-                    // Dot Indicators
+                    // Rating and Reviews
                     Positioned(
                       bottom: 20,
-                      left: 0,
-                      right: 0,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: List.generate(
-                          3,
-                          (index) => Container(
-                            margin: const EdgeInsets.symmetric(horizontal: 4),
-                            width: 8,
-                            height: 8,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: index == 0 ? Colors.white : Colors.grey,
+                      left: 20,
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 6,
+                        ),
+                        decoration: BoxDecoration(
+                          color: Colors.black.withOpacity(0.7),
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: Row(
+                          children: [
+                            const Icon(
+                              Icons.star,
+                              color: Colors.yellow,
+                              size: 16,
                             ),
-                          ),
+                            const SizedBox(width: 4),
+                            Text(
+                              product.rating.toString(),
+                              style: AppStyles.body2.copyWith(
+                                color: AppColors.secondary,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+                            Text(
+                              '(${product.reviewCount} reviews)',
+                              style: AppStyles.caption.copyWith(
+                                color: AppColors.secondary,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ),
@@ -91,8 +103,10 @@ class ProductDetailsView extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(20),
                 decoration: const BoxDecoration(
-                  color: Colors.black,
-                  borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+                  color: AppColors.secondary,
+                  borderRadius: BorderRadius.vertical(
+                    top: Radius.circular(20),
+                  ),
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -100,29 +114,155 @@ class ProductDetailsView extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: const [
-                            Text(
-                              'bennitta beige Midi dress for women',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                product.name,
+                                style: AppStyles.heading2,
                               ),
-                            ),
-                            SizedBox(height: 4),
-                            Text(
-                              '₹ 1,300',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 16,
+                              const SizedBox(height: 4),
+                              Text(
+                                '${AppStrings.price}${product.price}',
+                                style: AppStyles.heading2.copyWith(
+                                  color: AppColors.primary,
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
-                        const Icon(Icons.checkroom, color: Colors.white, size: 24),
+                        Container(
+                          padding: const EdgeInsets.all(8),
+                          decoration: BoxDecoration(
+                            color: AppColors.primary.withOpacity(0.1),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Text(
+                            product.category,
+                            style: AppStyles.caption.copyWith(
+                              color: AppColors.primary,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
                       ],
+                    ),
+                    const SizedBox(height: 20),
+                    if (product.colors.isNotEmpty) ...[
+                      Text(
+                        'Colors',
+                        style: AppStyles.body1.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      SizedBox(
+                        height: 40,
+                        child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: product.colors.length,
+                          itemBuilder: (context, index) {
+                            final color = product.colors[index];
+                            final isSelected = model.selectedColor == color;
+                            return GestureDetector(
+                              onTap: () => model.setColor(color),
+                              child: Container(
+                                width: 40,
+                                height: 40,
+                                margin: const EdgeInsets.only(right: 12),
+                                decoration: BoxDecoration(
+                                  border: Border.all(
+                                    color: isSelected
+                                        ? AppColors.primary
+                                        : Colors.transparent,
+                                    width: 2,
+                                  ),
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                padding: const EdgeInsets.all(2),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    color: Colors.grey,
+                                    borderRadius: BorderRadius.circular(6),
+                                  ),
+                                  child: Center(
+                                    child: Text(
+                                      color,
+                                      style: AppStyles.caption.copyWith(
+                                        color: AppColors.secondary,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                    ],
+                    if (product.sizes.isNotEmpty) ...[
+                      const SizedBox(height: 20),
+                      Text(
+                        'Size',
+                        style: AppStyles.body1.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      SizedBox(
+                        height: 40,
+                        child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: product.sizes.length,
+                          itemBuilder: (context, index) {
+                            final size = product.sizes[index];
+                            final isSelected = model.selectedSize == size;
+                            return GestureDetector(
+                              onTap: () => model.setSize(size),
+                              child: Container(
+                                width: 40,
+                                height: 40,
+                                margin: const EdgeInsets.only(right: 12),
+                                decoration: BoxDecoration(
+                                  color: isSelected
+                                      ? AppColors.primary
+                                      : AppColors.secondary,
+                                  border: Border.all(
+                                    color: AppColors.primary,
+                                  ),
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    size,
+                                    style: AppStyles.body2.copyWith(
+                                      color: isSelected
+                                          ? AppColors.secondary
+                                          : AppColors.primary,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                    ],
+                    const SizedBox(height: 20),
+                    Text(
+                      'Description',
+                      style: AppStyles.body1.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      product.description,
+                      style: AppStyles.body2.copyWith(
+                        color: AppColors.textLight,
+                      ),
                     ),
                     const SizedBox(height: 20),
                     Row(
@@ -131,126 +271,48 @@ class ProductDetailsView extends StatelessWidget {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              const Text(
-                                'COLOR:',
-                                style: TextStyle(
-                                  color: Colors.grey,
-                                  fontSize: 14,
+                              Text(
+                                'Quantity',
+                                style: AppStyles.body2.copyWith(
+                                  fontWeight: FontWeight.bold,
                                 ),
                               ),
-                              Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                                decoration: BoxDecoration(
-                                  border: Border.all(color: Colors.grey),
-                                  borderRadius: BorderRadius.circular(5),
-                                ),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: const [
-                                    Text(
-                                      'BEIGE',
-                                      style: TextStyle(color: Colors.white),
+                              const SizedBox(height: 8),
+                              Row(
+                                children: [
+                                  _buildQuantityButton(
+                                    icon: Icons.remove,
+                                    onPressed: model.decrementQuantity,
+                                  ),
+                                  const SizedBox(width: 16),
+                                  Text(
+                                    model.quantity.toString(),
+                                    style: AppStyles.body1.copyWith(
+                                      fontWeight: FontWeight.bold,
                                     ),
-                                    Icon(Icons.arrow_drop_down, color: Colors.white),
-                                  ],
-                                ),
+                                  ),
+                                  const SizedBox(width: 16),
+                                  _buildQuantityButton(
+                                    icon: Icons.add,
+                                    onPressed: model.incrementQuantity,
+                                  ),
+                                ],
                               ),
                             ],
                           ),
                         ),
                         const SizedBox(width: 20),
                         Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Text(
-                                'SIZE:',
-                                style: TextStyle(
-                                  color: Colors.grey,
-                                  fontSize: 14,
-                                ),
-                              ),
-                              Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                                decoration: BoxDecoration(
-                                  border: Border.all(color: Colors.grey),
-                                  borderRadius: BorderRadius.circular(5),
-                                ),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: const [
-                                    Text(
-                                      'XL',
-                                      style: TextStyle(color: Colors.white),
-                                    ),
-                                    Icon(Icons.arrow_drop_down, color: Colors.white),
-                                  ],
-                                ),
-                              ),
-                            ],
+                          child: ElevatedButton(
+                            style: AppStyles.primaryButton,
+                            onPressed: model.addToCart,
+                            child: const Text('Add to Cart'),
                           ),
                         ),
                       ],
                     ),
-                    const SizedBox(height: 20),
-                    const Text(
-                      'FLOWY MIDI SKIRT WITH ASYMMETRIC\nSILHOUETTE WITHOUT SLIT',
-                      style: TextStyle(
-                        color: Colors.grey,
-                        fontSize: 12,
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-                    ElevatedButton(
-                      onPressed: () => model.addToCart(),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.white,
-                        minimumSize: const Size(double.infinity, 50),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                      ),
-                      child: const Text(
-                        'ADD TO CART',
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
                   ],
                 ),
-              ),
-            ],
-          ),
-          bottomNavigationBar: BottomNavigationBar(
-            type: BottomNavigationBarType.fixed,
-            backgroundColor: Colors.black,
-            selectedItemColor: Colors.white,
-            unselectedItemColor: Colors.grey,
-            currentIndex: 0,
-            onTap: model.onNavItemTapped,
-            items: [
-              BottomNavigationBarItem(
-                icon: Image.asset('assets/Home.png', height: 24),
-                label: 'Home',
-              ),
-              BottomNavigationBarItem(
-                icon: Image.asset('assets/Diversity.png', height: 24),
-                label: 'Categories',
-              ),
-              BottomNavigationBarItem(
-                icon: Image.asset('assets/Heart.png', height: 24),
-                label: 'Favorites',
-              ),
-              BottomNavigationBarItem(
-                icon: Image.asset('assets/SuccessfulDelivery.png', height: 24),
-                label: 'Orders',
-              ),
-              BottomNavigationBarItem(
-                icon: Image.asset('assets/Person.png', height: 24),
-                label: 'Profile',
               ),
             ],
           ),
@@ -258,4 +320,25 @@ class ProductDetailsView extends StatelessWidget {
       ),
     );
   }
-} 
+
+  Widget _buildQuantityButton({
+    required IconData icon,
+    required VoidCallback onPressed,
+  }) {
+    return Container(
+      decoration: BoxDecoration(
+        color: AppColors.primary.withOpacity(0.1),
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: IconButton(
+        icon: Icon(icon, color: AppColors.primary),
+        onPressed: onPressed,
+        constraints: const BoxConstraints(
+          minWidth: 36,
+          minHeight: 36,
+        ),
+        padding: EdgeInsets.zero,
+      ),
+    );
+  }
+}

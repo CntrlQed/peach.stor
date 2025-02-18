@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../../models/product.dart';
 import '../../viewmodel/home_viewmodel.dart';
 import '../../view/screens/notification_view.dart';
+import '../widgets/base_page.dart';
+import '../../constants/app_constants.dart';
 
 class HomeView extends StatelessWidget {
   const HomeView({Key? key}) : super(key: key);
@@ -11,26 +14,30 @@ class HomeView extends StatelessWidget {
     return ChangeNotifierProvider<HomeViewModel>(
       create: (context) => HomeViewModel(),
       child: Consumer<HomeViewModel>(
-        builder: (context, model, child) => Scaffold(
-          appBar: AppBar(
+        builder: (context, model, child) => BasePage(
+          showBottomNav: true,
+          currentIndex: model.currentIndex,
+          onNavTap: (index) => model.setIndex(index, context),
+          customAppBar: AppBar(
             backgroundColor: Colors.white,
             elevation: 0,
             leading: Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Image.asset('assets/peach.png'),
+              child: Image.asset(AppAssets.peachIcon),
             ),
             actions: [
               IconButton(
-                icon: Image.asset('assets/Notification.png'),
+                icon: Image.asset(AppAssets.notificationIcon),
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const NotificationView()),
+                    MaterialPageRoute(
+                        builder: (context) => const NotificationView()),
                   );
                 },
               ),
               IconButton(
-                icon: Image.asset('assets/Shopping Bag.png'),
+                icon: Image.asset(AppAssets.shoppingBagIcon),
                 onPressed: () {},
               ),
             ],
@@ -39,32 +46,34 @@ class HomeView extends StatelessWidget {
             child: Column(
               children: [
                 // Main Ad Image
-                Image.asset(
-                  'assets/home_Ad.png',
-                  width: double.infinity,
-                  height: 300,
-                  fit: BoxFit.cover,
-                ),
+                // Image.asset(
+                //   AppAssets.homeAd,
+                //   width: double.infinity,
+                //   height: 200,
+                //   fit: BoxFit.cover,
+                // ),
                 const SizedBox(height: 20),
-                
+
                 // Dot indicators
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: List.generate(
-                    4,
-                    (index) => Container(
-                      margin: const EdgeInsets.symmetric(horizontal: 4),
-                      width: 8,
-                      height: 8,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: index == 0 ? Colors.black : Colors.grey,
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 20),
-                
+                // Row(
+                //   mainAxisAlignment: MainAxisAlignment.center,
+                //   children: List.generate(
+                //     4,
+                //     (index) => Container(
+                //       margin: const EdgeInsets.symmetric(horizontal: 4),
+                //       width: 8,
+                //       height: 8,
+                //       decoration: BoxDecoration(
+                //         shape: BoxShape.circle,
+                //         color: index == 0
+                //             ? AppColors.primary
+                //             : AppColors.textLight,
+                //       ),
+                //     ),
+                //   ),
+                // ),
+                // const SizedBox(height: 20),
+
                 // Products Grid
                 GridView.builder(
                   shrinkWrap: true,
@@ -79,20 +88,33 @@ class HomeView extends StatelessWidget {
                   itemCount: 8,
                   itemBuilder: (context, index) {
                     return GestureDetector(
-                      onTap: () => model.onProductTapped(context),
+                      onTap: () => model.onProductTapped(
+                        context,
+                        Product(
+                          id: index,
+                          name: 'Beige Shirt',
+                          description:
+                              'A comfortable beige shirt for casual wear',
+                          price: 2500,
+                          imageUrl: AppAssets.costume,
+                          category: 'Shirts',
+                        ),
+                      ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Card(
-                            elevation: 4,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(10),
-                              child: Image.asset(
-                                'assets/costume.png',
-                                fit: BoxFit.cover,
+                          Expanded(
+                            child: Card(
+                              elevation: 4,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(10),
+                                child: Image.asset(
+                                  AppAssets.costume,
+                                  fit: BoxFit.cover,
+                                ),
                               ),
                             ),
                           ),
@@ -100,19 +122,17 @@ class HomeView extends StatelessWidget {
                             padding: const EdgeInsets.only(left: 4, top: 8),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
-                              children: const [
+                              children: [
                                 Text(
                                   'Beige Shirt',
-                                  style: TextStyle(
-                                    fontSize: 14,
+                                  style: AppStyles.body1.copyWith(
                                     fontWeight: FontWeight.w500,
                                   ),
                                 ),
-                                SizedBox(height: 4),
+                                const SizedBox(height: 4),
                                 Text(
-                                  '₹2500',
-                                  style: TextStyle(
-                                    fontSize: 14,
+                                  '${AppStrings.price}2500',
+                                  style: AppStyles.body1.copyWith(
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
@@ -127,41 +147,8 @@ class HomeView extends StatelessWidget {
               ],
             ),
           ),
-          bottomNavigationBar: BottomNavigationBar(
-            type: BottomNavigationBarType.fixed,
-            backgroundColor: Colors.black,
-            selectedItemColor: Colors.white,
-            unselectedItemColor: Colors.grey,
-            showUnselectedLabels: true,
-            selectedLabelStyle: const TextStyle(fontSize: 12),
-            unselectedLabelStyle: const TextStyle(fontSize: 12),
-            items: [
-              BottomNavigationBarItem(
-                icon: Image.asset('assets/home.png', height: 24),
-                label: 'Home',
-              ),
-              BottomNavigationBarItem(
-                icon: Image.asset('assets/diversity.png', height: 24),
-                label: 'Categories',
-              ),
-              BottomNavigationBarItem(
-                icon: Image.asset('assets/heart.png', height: 24),
-                label: 'Favorites',
-              ),
-              BottomNavigationBarItem(
-                icon: Image.asset('assets/SuccessfulDelivery.png', height: 24),
-                label: 'Orders',
-              ),
-              BottomNavigationBarItem(
-                icon: Image.asset('assets/Person.png', height: 24),
-                label: 'Profile',
-              ),
-            ],
-            currentIndex: model.currentIndex,
-            onTap: (index) => model.setIndex(index, context),
-          ),
         ),
       ),
     );
   }
-} 
+}

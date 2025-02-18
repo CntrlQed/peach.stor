@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../../constants/app_constants.dart';
 import '../../viewmodel/login_viewmodel.dart';
 
 class LoginView extends StatelessWidget {
@@ -18,11 +19,11 @@ class LoginView extends StatelessWidget {
                 children: [
                   // Logo
                   Image.asset(
-                    'assets/peach.png',
+                    AppAssets.peachIcon,
                     height: 100,
                   ),
                   const SizedBox(height: 40),
-                  
+
                   // Email field
                   TextField(
                     decoration: InputDecoration(
@@ -33,7 +34,7 @@ class LoginView extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 20),
-                  
+
                   // Password field
                   TextField(
                     obscureText: true,
@@ -45,7 +46,7 @@ class LoginView extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 30),
-                  
+
                   // Sign In button
                   ElevatedButton(
                     onPressed: () => model.signIn(),
@@ -59,7 +60,7 @@ class LoginView extends StatelessWidget {
                     child: const Text('Sign In'),
                   ),
                   const SizedBox(height: 20),
-                  
+
                   // Google Sign In button
                   OutlinedButton.icon(
                     onPressed: () => model.signInWithGoogle(),
@@ -80,4 +81,4 @@ class LoginView extends StatelessWidget {
       ),
     );
   }
-} 
+}

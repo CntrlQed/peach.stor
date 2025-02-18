@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../../constants/app_constants.dart';
 import '../../viewmodel/signup_viewmodel.dart';
 
 class SignUpView extends StatelessWidget {
@@ -17,11 +18,11 @@ class SignUpView extends StatelessWidget {
               child: Column(
                 children: [
                   Image.asset(
-                    'assets/peach.png',
+                    AppAssets.peachIcon,
                     height: 100,
                   ),
                   const SizedBox(height: 40),
-                  
+
                   // First Name
                   TextField(
                     decoration: InputDecoration(
@@ -32,7 +33,7 @@ class SignUpView extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 20),
-                  
+
                   // Last Name
                   TextField(
                     decoration: InputDecoration(
@@ -43,7 +44,7 @@ class SignUpView extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 20),
-                  
+
                   // Phone Number
                   TextField(
                     keyboardType: TextInputType.phone,
@@ -55,7 +56,7 @@ class SignUpView extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 20),
-                  
+
                   // Email
                   TextField(
                     keyboardType: TextInputType.emailAddress,
@@ -67,7 +68,7 @@ class SignUpView extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 20),
-                  
+
                   // Password
                   TextField(
                     obscureText: true,
@@ -79,7 +80,7 @@ class SignUpView extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 30),
-                  
+
                   // Create Account button
                   ElevatedButton(
                     onPressed: () => model.createAccount(),
@@ -93,11 +94,11 @@ class SignUpView extends StatelessWidget {
                     child: const Text('CREATE ACCOUNT'),
                   ),
                   const SizedBox(height: 20),
-                  
+
                   // Google Sign Up button
                   OutlinedButton.icon(
                     onPressed: () => model.signUpWithGoogle(),
-                    icon: Image.asset('assets/google.png', height: 24),
+                    icon: Image.asset(AppAssets.googleIcon, height: 24),
                     label: const Text('Sign up with Google'),
                     style: OutlinedButton.styleFrom(
                       minimumSize: const Size(double.infinity, 50),
@@ -114,4 +115,4 @@ class SignUpView extends StatelessWidget {
       ),
     );
   }
-} 
+}

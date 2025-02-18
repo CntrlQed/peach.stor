@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../../constants/app_constants.dart';
 import '../../viewmodel/choose_viewmodel.dart';
 import 'home_view.dart';
 
@@ -21,11 +22,11 @@ class ChooseView extends StatelessWidget {
                 children: [
                   // Logo
                   Image.asset(
-                    'assets/peach.png',
+                    AppAssets.peachIcon,
                     height: 80,
                   ),
                   const SizedBox(height: 40),
-                  
+
                   const Text(
                     'Welcome :)',
                     style: TextStyle(
@@ -35,7 +36,7 @@ class ChooseView extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 20),
-                  
+
                   const Text(
                     'continue as,',
                     style: TextStyle(
@@ -44,13 +45,14 @@ class ChooseView extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 30),
-                  
+
                   // User Button
                   ElevatedButton(
                     onPressed: () {
                       Navigator.pushReplacement(
                         context,
-                        MaterialPageRoute(builder: (context) => const HomeView()),
+                        MaterialPageRoute(
+                            builder: (context) => const HomeView()),
                       );
                     },
                     style: ElevatedButton.styleFrom(
@@ -70,7 +72,7 @@ class ChooseView extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 20),
-                  
+
                   // Carrier Button
                   ElevatedButton(
                     onPressed: () => model.onCarrierSelected(),
@@ -98,4 +100,4 @@ class ChooseView extends StatelessWidget {
       ),
     );
   }
-} 
+}

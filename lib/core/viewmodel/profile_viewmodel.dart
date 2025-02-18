@@ -76,11 +76,49 @@ class ProfileViewModel extends BaseViewModel {
     );
   }
 
-  void onNavItemTapped(int index) {
-    if (index != 4) { // If not profile tab
+  void onNavItemTapped(int index, BuildContext context) {
+    if (index != 4) {
+      // If not profile tab
       setState(ViewState.busy);
-      // TODO: Implement navigation to other screens
+      switch (index) {
+        case 0:
+          Navigator.pushReplacementNamed(context, '/home');
+          break;
+        case 1:
+          Navigator.pushReplacementNamed(context, '/categories');
+          break;
+        case 2:
+          Navigator.pushReplacementNamed(context, '/favorites');
+          break;
+        case 3:
+          Navigator.pushReplacementNamed(context, '/orders');
+          break;
+      }
       setState(ViewState.idle);
     }
   }
-} 
+
+  void onEditProfileTapped(BuildContext context) {
+    // TODO: Navigate to edit profile
+    print('Navigate to edit profile');
+  }
+
+  void onAddressesTapped(BuildContext context) {
+    // TODO: Navigate to addresses
+    print('Navigate to addresses');
+  }
+
+  void onOrdersTapped(BuildContext context) {
+    Navigator.pushReplacementNamed(context, '/orders');
+  }
+
+  void onPaymentMethodsTapped(BuildContext context) {
+    // TODO: Navigate to payment methods
+    print('Navigate to payment methods');
+  }
+
+  void onLogoutTapped(BuildContext context) {
+    // TODO: Implement logout
+    print('Logout tapped');
+  }
+}

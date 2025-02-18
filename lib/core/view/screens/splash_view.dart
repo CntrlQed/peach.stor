@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../../constants/app_constants.dart';
 import '../../viewmodel/splash_viewmodel.dart';
 
 class SplashView extends StatelessWidget {
@@ -24,7 +25,7 @@ class SplashView extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Image.asset(
-                  'assets/peach.png',
+                  AppAssets.peachIcon,
                   width: 200,
                   height: 200,
                 ),
@@ -35,4 +36,4 @@ class SplashView extends StatelessWidget {
       ),
     );
   }
-} 
+}
