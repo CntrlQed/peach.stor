@@ -48,13 +48,7 @@ class ChooseView extends StatelessWidget {
 
                   // User Button
                   ElevatedButton(
-                    onPressed: () {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const HomeView()),
-                      );
-                    },
+                    onPressed: () => model.onUserSelected(context),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.white,
                       minimumSize: const Size(double.infinity, 50),
@@ -75,7 +69,7 @@ class ChooseView extends StatelessWidget {
 
                   // Carrier Button
                   ElevatedButton(
-                    onPressed: () => model.onCarrierSelected(),
+                    onPressed: () => model.onCarrierSelected(context),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.white,
                       minimumSize: const Size(double.infinity, 50),

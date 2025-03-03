@@ -4,13 +4,32 @@ import '../../constants/app_constants.dart';
 import '../../viewmodel/profile_viewmodel.dart';
 import '../../view/widgets/base_page.dart';
 
-class ProfileView extends StatelessWidget {
+class ProfileView extends StatefulWidget {
   const ProfileView({Key? key}) : super(key: key);
 
   @override
+  State<ProfileView> createState() => _ProfileViewState();
+}
+
+class _ProfileViewState extends State<ProfileView> {
+  late final ProfileViewModel _viewModel;
+
+  @override
+  void initState() {
+    super.initState();
+    _viewModel = ProfileViewModel();
+  }
+
+  @override
+  void dispose() {
+    _viewModel.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<ProfileViewModel>(
-      create: (context) => ProfileViewModel(),
+    return ChangeNotifierProvider<ProfileViewModel>.value(
+      value: _viewModel,
       child: Consumer<ProfileViewModel>(
         builder: (context, model, child) => BasePage(
           showBottomNav: true,
@@ -27,11 +46,11 @@ class ProfileView extends StatelessWidget {
             actions: [
               IconButton(
                 icon: Image.asset(AppAssets.notificationIcon),
-                onPressed: () {},
+                onPressed: () => Navigator.pushNamed(context, '/notifications'),
               ),
               IconButton(
                 icon: Image.asset(AppAssets.shoppingBagIcon),
-                onPressed: () {},
+                onPressed: () => Navigator.pushNamed(context, '/cart'),
               ),
             ],
           ),
@@ -43,32 +62,41 @@ class ProfileView extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Row(
                   children: [
-                    CircleAvatar(
-                      radius: 25,
-                      backgroundColor: Colors.grey[300],
-                      child: const Text(
-                        'NS',
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
-                        ),
+                    GestureDetector(
+                      onTap: () => model.onEditProfileTapped(context),
+                      child: CircleAvatar(
+                        radius: 25,
+                        backgroundColor: Colors.grey[300],
+                        backgroundImage: model.user?.profilePicture != null
+                            ? NetworkImage(model.user!.profilePicture!)
+                            : null,
+                        child: model.user?.profilePicture == null
+                            ? Text(
+                                model.user?.name.substring(0, 2).toUpperCase() ??
+                                    'NA',
+                                style: const TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              )
+                            : null,
                       ),
                     ),
                     const SizedBox(width: 15),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: const [
+                      children: [
                         Text(
-                          'Hello Noora,',
-                          style: TextStyle(
+                          'Hello ${model.user?.name ?? "User"}',
+                          style: const TextStyle(
                             color: Colors.white,
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
                         Text(
-                          'noorasaji@gmail.com',
-                          style: TextStyle(
+                          model.user?.email ?? 'No email',
+                          style: const TextStyle(
                             color: Colors.grey,
                             fontSize: 14,
                           ),
@@ -77,8 +105,8 @@ class ProfileView extends StatelessWidget {
                     ),
                     const Spacer(),
                     IconButton(
-                      icon: const Icon(Icons.menu, color: Colors.white),
-                      onPressed: () {},
+                      icon: const Icon(Icons.edit, color: Colors.white),
+                      onPressed: () => model.onEditProfileTapped(context),
                     ),
                   ],
                 ),
@@ -89,13 +117,13 @@ class ProfileView extends StatelessWidget {
                 'Address Book',
                 'View all saved addresses',
                 Icons.home_outlined,
-                onTap: () {},
+                onTap: () => Navigator.pushNamed(context, '/addresses'),
               ),
               _buildMenuItem(
                 'Order History',
                 'View all past orders',
                 Icons.history,
-                onTap: () {},
+                onTap: () => Navigator.pushNamed(context, '/order-history'),
               ),
               _buildMenuItem(
                 'Change Password',

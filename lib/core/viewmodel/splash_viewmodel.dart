@@ -1,23 +1,39 @@
 import 'package:flutter/material.dart';
+import '../services/auth_service.dart';
 import 'base_viewmodel.dart';
-import '../view/screens/starting_view.dart';
 
 class SplashViewModel extends BaseViewModel {
-  SplashViewModel() {
-    _init();
-  }
+  final AuthService _authService = AuthService();
 
-  Future<void> _init() async {
-    setState(ViewState.busy);
-    // Simulate loading time
-    await Future.delayed(const Duration(seconds: 2));
-    setState(ViewState.idle);
-  }
-
-  void navigateToStartingView(BuildContext context) {
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) => const StartingView()),
-    );
+  Future<void> checkAuthAndNavigate(BuildContext context) async {
+    try {
+      setState(ViewState.busy);
+      
+      final isLoggedIn = await _authService.isLoggedIn();
+      debugPrint('SplashViewModel: User logged in status: $isLoggedIn');
+      
+      if (isLoggedIn) {
+        final userType = await _authService.getUserType();
+        debugPrint('SplashViewModel: User type: $userType');
+        
+        if (userType == 'user') {
+          Navigator.pushReplacementNamed(context, '/home');
+        } else if (userType == 'carrier') {
+          Navigator.pushReplacementNamed(context, '/map');
+        } else {
+          // If user type is not set, go to choose view
+          Navigator.pushReplacementNamed(context, '/choose');
+        }
+      } else {
+        // Not logged in, go to choose view
+        Navigator.pushReplacementNamed(context, '/choose');
+      }
+    } catch (e) {
+      debugPrint('SplashViewModel Error: $e');
+      // On error, default to choose view
+      Navigator.pushReplacementNamed(context, '/choose');
+    } finally {
+      setState(ViewState.idle);
+    }
   }
 } 

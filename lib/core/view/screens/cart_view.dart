@@ -13,7 +13,7 @@ class CartView extends StatelessWidget {
       create: (context) => CartViewModel()..loadDummyData(),
       child: Consumer<CartViewModel>(
         builder: (context, model, child) => BasePage(
-          title: 'Cart',
+          title: 'My Cart',
           showBackButton: true,
           showBottomNav: false,
           backgroundColor: AppColors.background,
@@ -21,14 +21,16 @@ class CartView extends StatelessWidget {
               ? const Center(
                   child: CircularProgressIndicator(color: AppColors.primary))
               : Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Expanded(
                       child: model.cartItems.isEmpty
                           ? _buildEmptyCart(context)
                           : _buildCartList(model),
                     ),
-                    if (model.cartItems.isNotEmpty)
-                      _buildCheckoutSection(model),
+                    _buildCouponSection(),
+                    _buildPaymentDetails(model),
+                    _buildCheckoutButton(),
                   ],
                 ),
         ),
@@ -175,46 +177,61 @@ class CartView extends StatelessWidget {
     );
   }
 
-  Widget _buildCheckoutSection(CartViewModel model) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: AppColors.secondary,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.1),
-            blurRadius: 10,
-            offset: const Offset(0, -5),
+  Widget _buildCouponSection() {
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text('Coupons for you', style: AppStyles.heading2),
+          const SizedBox(height: 8),
+          ElevatedButton(
+            style: AppStyles.primaryButton,
+            onPressed: () {},
+            child: const Text('Apply Coupons'),
           ),
         ],
       ),
-      child: SafeArea(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  'Total:',
-                  style: AppStyles.body1.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                Text(
-                  '${AppStrings.price}${model.totalAmount}',
-                  style: AppStyles.heading2,
-                ),
-              ],
-            ),
-            const SizedBox(height: 16),
-            ElevatedButton(
-              style: AppStyles.primaryButton,
-              onPressed: () => model.proceedToCheckout(),
-              child: const Text('Proceed to Checkout'),
-            ),
-          ],
-        ),
+    );
+  }
+
+  Widget _buildPaymentDetails(CartViewModel model) {
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text('Payment details', style: AppStyles.heading2),
+          const SizedBox(height: 8),
+          _buildPaymentRow('Subtotal', '${AppStrings.price}${model.totalAmount}'),
+          _buildPaymentRow('Discount', '₹0'),
+          _buildPaymentRow('Shipping', 'To be calculated at the checkout'),
+          _buildPaymentRow('Grand Total', '${AppStrings.price}${model.totalAmount}'),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildPaymentRow(String label, String value) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(label, style: AppStyles.body1),
+          Text(value, style: AppStyles.body1),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildCheckoutButton() {
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: ElevatedButton(
+        style: AppStyles.primaryButton,
+        onPressed: () {},
+        child: const Text('CHECKOUT'),
       ),
     );
   }

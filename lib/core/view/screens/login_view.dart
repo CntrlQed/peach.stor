@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../constants/app_constants.dart';
 import '../../viewmodel/login_viewmodel.dart';
+import '../../viewmodel/base_viewmodel.dart';
 
 class LoginView extends StatelessWidget {
   const LoginView({Key? key}) : super(key: key);
@@ -24,32 +25,53 @@ class LoginView extends StatelessWidget {
                   ),
                   const SizedBox(height: 40),
 
+                  // Error message
+                  if (model.state == ViewState.error)
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 20),
+                      child: Text(
+                        model.errorMessage,
+                        style: const TextStyle(
+                          color: Colors.red,
+                          fontSize: 14,
+                        ),
+                      ),
+                    ),
+
                   // Email field
                   TextField(
+                    controller: model.emailController,
                     decoration: InputDecoration(
                       hintText: 'Email',
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
                     ),
+                    keyboardType: TextInputType.emailAddress,
+                    textInputAction: TextInputAction.next,
                   ),
                   const SizedBox(height: 20),
 
                   // Password field
                   TextField(
-                    obscureText: true,
+                    controller: model.passwordController,
                     decoration: InputDecoration(
                       hintText: 'Password',
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
                     ),
+                    obscureText: true,
+                    textInputAction: TextInputAction.done,
+                    onSubmitted: (_) => model.signIn(context),
                   ),
                   const SizedBox(height: 30),
 
                   // Sign In button
                   ElevatedButton(
-                    onPressed: () => model.signIn(),
+                    onPressed: model.state == ViewState.busy
+                        ? null
+                        : () => model.signIn(context),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.black,
                       minimumSize: const Size(double.infinity, 50),
@@ -57,14 +79,26 @@ class LoginView extends StatelessWidget {
                         borderRadius: BorderRadius.circular(10),
                       ),
                     ),
-                    child: const Text('Sign In'),
+                    child: model.state == ViewState.busy
+                        ? const SizedBox(
+                            height: 20,
+                            width: 20,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                              valueColor:
+                                  AlwaysStoppedAnimation<Color>(Colors.white),
+                            ),
+                          )
+                        : const Text('Sign In'),
                   ),
                   const SizedBox(height: 20),
 
                   // Google Sign In button
                   OutlinedButton.icon(
-                    onPressed: () => model.signInWithGoogle(),
-                    icon: Image.asset('assets/google.png', height: 24),
+                    onPressed: model.state == ViewState.busy
+                        ? null
+                        : () => model.signInWithGoogle(context),
+                    icon: Image.asset(AppAssets.googleIcon, height: 24),
                     label: const Text('Sign in with Google'),
                     style: OutlinedButton.styleFrom(
                       minimumSize: const Size(double.infinity, 50),
@@ -72,6 +106,28 @@ class LoginView extends StatelessWidget {
                         borderRadius: BorderRadius.circular(10),
                       ),
                     ),
+                  ),
+                  const SizedBox(height: 20),
+
+                  // Sign Up section
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text(
+                        "Don't have an account? ",
+                        style: TextStyle(color: Colors.grey),
+                      ),
+                      TextButton(
+                        onPressed: () => model.navigateToSignUp(context),
+                        child: const Text(
+                          'Sign Up',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),
