@@ -19,6 +19,8 @@ import 'core/view/screens/categories_view.dart';
 import 'core/view/screens/favorites_view.dart';
 import 'core/view/screens/profile_view.dart';
 import 'core/view/screens/cart_view.dart';
+import 'core/view/screens/save_address_view.dart';
+import 'core/view/screens/payment_address_view.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -53,6 +55,22 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.blue,
           visualDensity: VisualDensity.adaptivePlatformDensity,
+          scaffoldBackgroundColor: Colors.black,
+          textTheme: TextTheme(
+            displayLarge: TextStyle(color: Colors.white),
+            displayMedium: TextStyle(color: Colors.white),
+            displaySmall: TextStyle(color: Colors.white),
+            headlineMedium: TextStyle(color: Colors.white),
+            headlineSmall: TextStyle(color: Colors.white),
+            titleLarge: TextStyle(color: Colors.white),
+            titleMedium: TextStyle(color: Colors.white),
+            titleSmall: TextStyle(color: Colors.white),
+            bodyLarge: TextStyle(color: Colors.white),
+            bodyMedium: TextStyle(color: Colors.white),
+            bodySmall: TextStyle(color: Colors.white),
+            labelLarge: TextStyle(color: Colors.white),
+            labelSmall: TextStyle(color: Colors.white),
+          ),
         ),
         initialRoute: '/',
         routes: {
@@ -73,7 +91,12 @@ class MyApp extends StatelessWidget {
               onSave: args['onSave'],
             );
           },
-          '/cart': (context) => const CartView(),
+          '/cart': (context) => CartView(),
+          '/save-address': (context) => SaveAddressView(),
+          '/payment-address': (context) {
+            final args = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+            return PaymentAddressView(address: args['address']);
+          },
         },
         debugShowCheckedModeBanner: false,
       ),

@@ -22,9 +22,10 @@ class SignUpView extends StatelessWidget {
             ),
           ),
           body: SafeArea(
-            child: Padding(
+            child: SingleChildScrollView(
               padding: const EdgeInsets.all(20.0),
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   // Logo
                   Image.asset(
@@ -114,6 +115,29 @@ class SignUpView extends StatelessWidget {
                         borderRadius: BorderRadius.circular(10),
                       ),
                     ),
+                  ),
+
+                  const SizedBox(height: 20),
+
+                  // Login section
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text(
+                        'Already have an account? ',
+                        style: TextStyle(color: Colors.grey),
+                      ),
+                      TextButton(
+                        onPressed: () => Navigator.pushNamed(context, '/login'),
+                        child: const Text(
+                          'Login',
+                          style: TextStyle(
+                            color: Color.fromARGB(255, 194, 194, 194),
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),

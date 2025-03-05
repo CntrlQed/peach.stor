@@ -3,13 +3,26 @@ import '../../viewmodel/base_viewmodel.dart';
 import '../../viewmodel/splash_viewmodel.dart';
 import '../base_view.dart';
 
-class SplashView extends StatelessWidget {
+class SplashView extends StatefulWidget {
   const SplashView({Key? key}) : super(key: key);
+
+  @override
+  _SplashViewState createState() => _SplashViewState();
+}
+
+class _SplashViewState extends State<SplashView> {
+  late SplashViewModel model;
+
+  @override
+  void initState() {
+    super.initState();
+    model = SplashViewModel();
+    model.checkAuthAndNavigate(context);
+  }
 
   @override
   Widget build(BuildContext context) {
     return BaseView<SplashViewModel>(
-      onModelReady: (model) => model.checkAuthAndNavigate(context),
       builder: (context, model, child) => Scaffold(
         body: Center(
           child: Column(

@@ -36,7 +36,7 @@ flutter:
     - assets/home_Ad.png
     - assets/starting.png
     - assets/google.png
-    - assets/home_ad.png
+    - assets/home_Ad.png
     - assets/costume.png
     - assets/home.png
     - assets/diversity.png
@@ -46,4 +46,8 @@ flutter:
     - assets/Notification.png
     - assets/Shopping Bag.png
     - assets/active_status.png
+    - assets/Group 58.png
+    - assets/image 1.png
+    - assets/Group 59.png
+    - assets/map.jpeg
     - .env 

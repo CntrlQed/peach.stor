@@ -50,9 +50,18 @@ class BasePage extends StatelessWidget {
         },
       ),
       bottomNavigationBar: showBottomNav && onNavTap != null
-          ? AppBottomNav(
-              currentIndex: currentIndex,
-              onTap: onNavTap!,
+          ? Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  color: Colors.white,
+                  height: 1.0,
+                ),
+                AppBottomNav(
+                  currentIndex: currentIndex,
+                  onTap: onNavTap!,
+                ),
+              ],
             )
           : null,
       floatingActionButton: floatingActionButton != null

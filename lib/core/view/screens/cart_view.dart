@@ -16,7 +16,7 @@ class CartView extends StatelessWidget {
           title: 'My Cart',
           showBackButton: true,
           showBottomNav: false,
-          backgroundColor: AppColors.background,
+          backgroundColor: Colors.black,
           body: model.isLoading
               ? const Center(
                   child: CircularProgressIndicator(color: AppColors.primary))
@@ -28,9 +28,22 @@ class CartView extends StatelessWidget {
                           ? _buildEmptyCart(context)
                           : _buildCartList(model),
                     ),
+                    const SizedBox(height: 8),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      child: Text('Coupons for you', style: AppStyles.body1.copyWith(color: Colors.white)),
+                    ),
+                    const SizedBox(height: 4),
                     _buildCouponSection(),
+                    const SizedBox(height: 8),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      child: Text('Payment details', style: AppStyles.body1.copyWith(color: Colors.white)),
+                    ),
+                    const SizedBox(height: 4),
                     _buildPaymentDetails(model),
-                    _buildCheckoutButton(),
+                    const SizedBox(height: 8),
+                    _buildCheckoutButton(context),
                   ],
                 ),
         ),
@@ -71,7 +84,7 @@ class CartView extends StatelessWidget {
 
   Widget _buildCartList(CartViewModel model) {
     return ListView.builder(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.symmetric(vertical: 16),
       itemCount: model.cartItems.length,
       itemBuilder: (context, index) {
         final item = model.cartItems[index];
@@ -91,64 +104,71 @@ class CartView extends StatelessWidget {
               color: AppColors.secondary,
             ),
           ),
-          child: Card(
-            margin: const EdgeInsets.only(bottom: 16),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(8),
-              child: Row(
-                children: [
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(8),
-                    child: Image.asset(
-                      item.imageUrl,
-                      width: 80,
-                      height: 80,
-                      fit: BoxFit.cover,
-                    ),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(8),
+                  child: Image.asset(
+                    item.imageUrl,
+                    width: 80,
+                    height: 80,
+                    fit: BoxFit.cover,
                   ),
-                  const SizedBox(width: 16),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          item.name,
-                          style: AppStyles.body1.copyWith(
-                            fontWeight: FontWeight.bold,
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        item.name,
+                        style: AppStyles.body1.copyWith(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        'L / Beige',
+                        style: AppStyles.body2.copyWith(
+                          color: Colors.grey,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        '${AppStrings.price}${item.price}',
+                        style: AppStyles.body2.copyWith(
+                          color: Colors.white,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Row(
+                        children: [
+                          _buildQuantityButton(
+                            icon: Icons.remove,
+                            onPressed: () => model.decrementQuantity(item.id),
                           ),
-                        ),
-                        const SizedBox(height: 4),
-                        Text(
-                          '${AppStrings.price}${item.price}',
-                          style: AppStyles.body2,
-                        ),
-                        const SizedBox(height: 8),
-                        Row(
-                          children: [
-                            _buildQuantityButton(
-                              icon: Icons.remove,
-                              onPressed: () => model.decrementQuantity(item.id),
+                          const SizedBox(width: 8),
+                          Text(
+                            item.quantity.toString(),
+                            style: AppStyles.body1.copyWith(
+                              color: Colors.white,
                             ),
-                            const SizedBox(width: 16),
-                            Text(
-                              item.quantity.toString(),
-                              style: AppStyles.body1,
-                            ),
-                            const SizedBox(width: 16),
-                            _buildQuantityButton(
-                              icon: Icons.add,
-                              onPressed: () => model.incrementQuantity(item.id),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
+                          ),
+                          const SizedBox(width: 8),
+                          _buildQuantityButton(
+                            icon: Icons.add,
+                            onPressed: () => model.incrementQuantity(item.id),
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         );
@@ -162,11 +182,11 @@ class CartView extends StatelessWidget {
   }) {
     return Container(
       decoration: BoxDecoration(
-        color: AppColors.primary,
+        color: Colors.white,
         borderRadius: BorderRadius.circular(4),
       ),
       child: IconButton(
-        icon: Icon(icon, size: 16, color: AppColors.secondary),
+        icon: Icon(icon, size: 16, color: Colors.black),
         onPressed: onPressed,
         constraints: const BoxConstraints(
           minWidth: 32,
@@ -180,17 +200,19 @@ class CartView extends StatelessWidget {
   Widget _buildCouponSection() {
     return Padding(
       padding: const EdgeInsets.all(16.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text('Coupons for you', style: AppStyles.heading2),
-          const SizedBox(height: 8),
-          ElevatedButton(
-            style: AppStyles.primaryButton,
-            onPressed: () {},
-            child: const Text('Apply Coupons'),
-          ),
-        ],
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        decoration: BoxDecoration(
+          color: Colors.grey[200],
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text('Apply Coupons', style: AppStyles.body1),
+            const Icon(Icons.arrow_forward_ios, size: 16),
+          ],
+        ),
       ),
     );
   }
@@ -198,40 +220,56 @@ class CartView extends StatelessWidget {
   Widget _buildPaymentDetails(CartViewModel model) {
     return Padding(
       padding: const EdgeInsets.all(16.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text('Payment details', style: AppStyles.heading2),
-          const SizedBox(height: 8),
-          _buildPaymentRow('Subtotal', '${AppStrings.price}${model.totalAmount}'),
-          _buildPaymentRow('Discount', '₹0'),
-          _buildPaymentRow('Shipping', 'To be calculated at the checkout'),
-          _buildPaymentRow('Grand Total', '${AppStrings.price}${model.totalAmount}'),
-        ],
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: Colors.grey[200],
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _buildPaymentRow('Subtotal', '${AppStrings.price}${model.totalAmount}'),
+            _buildPaymentRow('Discount', '₹0'),
+            _buildPaymentRow('Shipping', 'To be calculated at the checkout',
+              style: AppStyles.body2.copyWith(color: Colors.grey)),
+            _buildPaymentRow('Grand Total', '${AppStrings.price}${model.totalAmount}'),
+          ],
+        ),
       ),
     );
   }
 
-  Widget _buildPaymentRow(String label, String value) {
+  Widget _buildPaymentRow(String label, String value, {TextStyle? style}) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(label, style: AppStyles.body1),
-          Text(value, style: AppStyles.body1),
+          Text(value, style: style ?? AppStyles.body1),
         ],
       ),
     );
   }
 
-  Widget _buildCheckoutButton() {
+  Widget _buildCheckoutButton(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: ElevatedButton(
-        style: AppStyles.primaryButton,
-        onPressed: () {},
-        child: const Text('CHECKOUT'),
+      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+      child: Center(
+        child: ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.white,
+            padding: const EdgeInsets.symmetric(vertical: 12),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
+          ),
+          onPressed: () {
+            Navigator.pushNamed(context, '/save-address');
+          },
+          child: const Text('CHECKOUT', style: TextStyle(color: Colors.black)),
+        ),
       ),
     );
   }

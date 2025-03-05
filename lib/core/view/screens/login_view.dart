@@ -14,10 +14,12 @@ class LoginView extends StatelessWidget {
       child: Consumer<LoginViewModel>(
         builder: (context, model, child) => Scaffold(
           body: SafeArea(
-            child: Padding(
+            child: SingleChildScrollView(
               padding: const EdgeInsets.all(20.0),
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
+                  const SizedBox(height: 40),
                   // Logo
                   Image.asset(
                     AppAssets.peachIcon,
@@ -122,7 +124,7 @@ class LoginView extends StatelessWidget {
                         child: const Text(
                           'Sign Up',
                           style: TextStyle(
-                            color: Colors.black,
+                            color: Color.fromARGB(255, 194, 194, 194),
                             fontWeight: FontWeight.bold,
                           ),
                         ),

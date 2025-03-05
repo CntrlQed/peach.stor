@@ -18,6 +18,55 @@ class FavoritesView extends StatelessWidget {
           onNavTap: (index) => model.onNavItemTapped(index, context),
           title: AppStrings.favorites,
           backgroundColor: AppColors.primary,
+          customAppBar: AppBar(
+            backgroundColor: Colors.black,
+            elevation: 0,
+            leading: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Image.asset(
+                AppAssets.peachIcon,
+                height: 40,
+                width: 40,
+              ),
+            ),
+            actions: [
+              Stack(
+                children: [
+                  IconButton(
+                    icon: Image.asset(AppAssets.notificationIcon, height: 24),
+                    onPressed: () {
+                      Navigator.pushNamed(context, '/notifications');
+                    },
+                  ),
+                  Positioned(
+                    right: 8,
+                    top: 8,
+                    child: Container(
+                      width: 8,
+                      height: 8,
+                      decoration: BoxDecoration(
+                        color: Colors.red,
+                        shape: BoxShape.circle,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              IconButton(
+                icon: Image.asset(AppAssets.shoppingBagIcon, height: 24),
+                onPressed: () {
+                  Navigator.pushNamed(context, '/cart');
+                },
+              ),
+            ],
+            bottom: PreferredSize(
+              preferredSize: const Size.fromHeight(1.0),
+              child: Container(
+                color: Colors.white,
+                height: 1.0,
+              ),
+            ),
+          ),
           body: GridView.builder(
             padding: const EdgeInsets.all(16),
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
